@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   error_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/16 18:30:21 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/06/16 18:30:21 by jaemyu           ###   ########.fr       */
+/*   Created: 2025/08/03 21:45:20 by jaemyu            #+#    #+#             */
+/*   Updated: 2025/08/03 21:45:20 by jaemyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "pipex_bonus.h"
+#include <stdio.h>
 
-# include "../libft/libft.h"
-# include <errno.h>
-# include <fcntl.h>
-# include <stdlib.h>
-# include <sys/wait.h>
-# include <unistd.h>
-# include <stdio.h>
-
-#endif
+void    error_exit(const char *msg, int exit_code, char **splited)
+{
+	if (splited)
+		free_split(splited);
+    perror(msg);
+	printf("%d", errno);
+	if(!exit_code)
+		exit(errno);
+    exit(exit_code);
+}

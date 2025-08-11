@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemyu <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hekim <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 15:26:47 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/04/03 15:31:46 by jaemyu           ###   ########.fr       */
+/*   Created: 2025/04/01 23:03:35 by hekim             #+#    #+#             */
+/*   Updated: 2025/04/01 23:03:43 by hekim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 char	*ft_strchr(const char *s, int c)
 {
+	if (!s)
+		return ((void *)0);
 	while (*s)
 	{
-		if ((unsigned char)*s == (unsigned char)c)
+		if (*s == (char)c)
 			return ((char *)s);
 		s++;
 	}
-	if ((unsigned char)*s == (unsigned char)c)
+	if (*s == (char)c)
 		return ((char *)s);
-	return (NULL);
+	return ((void *)0);
 }

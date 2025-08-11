@@ -12,19 +12,19 @@
 
 #include "pipex_bonus.h"
 
-void    free_split(char **split)
+void	free_split(char **split)
 {
-    int i;
+	int		i;
 
-    if (!split)
-        return ;
-    i = 0;
-    while (split[i])
-    {
-		free(split[i]);
+	if (! split)
+		return ;
+	i = 0;
+	while (split[i])
+	{
+		free (split[i]);
 		i++;
-    }
-    free(split);
+	}
+	free (split);
 }
 
 char	**find_paths(char **env)
@@ -35,6 +35,7 @@ char	**find_paths(char **env)
 			return (ft_split(*env + 5, ':'));
 		env++;
 	}
+	ft_print_error("Could not find environment variable PATH");
 	return (NULL);
 }
 
@@ -73,7 +74,7 @@ void	execute_cmd(char *argv, char **env)
 	char	*cmd_path;
 
 	path = find_paths(env);
-	if (!*argv)
+	if (!*argv || !*path)
 	{
 		free_split(path);
 		write(2, "permission denied\n", 18);

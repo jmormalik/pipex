@@ -32,7 +32,8 @@ int	child_process(char	*av, char **env, int input_fd)
 
 	if (pipe(pipefd) < 0)
 		error_exit("pipe failed", 1, NULL);
-	if ((pid = fork()) < 0)
+	pid = fork();
+	if (pid < 0)
 		error_exit("fork failed", 1, NULL);
 	if (pid == 0)
 	{
@@ -44,12 +45,11 @@ int	child_process(char	*av, char **env, int input_fd)
 		}
 		dup2(input_fd, STDIN_FILENO);
 		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
 		close(input_fd);
+		close(pipefd[1]);
 		execute_cmd(av, env);
 	}
 	close(input_fd);
 	close(pipefd[1]);
 	return (pipefd[0]);
 }
-

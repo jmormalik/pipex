@@ -1,61 +1,80 @@
-# EXECUTABLE NAMES
 NAME = pipex
-NAME_BONUS = pipex
 
-# COMPILER AND FLAGS
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g $(INCLUDES)
-RM = rm -f
+DIRECTORY = ./project
 
-# DIRECTORIES
-SRC_DIR = project/src
-INCLUDE_DIR = project/includes
-PIPEX_DIR = $(SRC_DIR)/pipex
-PIPEX_BONUS_DIR = $(SRC_DIR)/pipex_bonus
-GNL_DIR = $(SRC_DIR)/get_next_line
-LIBFT_DIR = $(SRC_DIR)/libft
+SOURCE = $(DIRECTORY)/src
+PIPEX = $(SOURCE)/pipex
+PIPEX_BONUS = $(SOURCE)/pipex_bonus
+LIBFT = $(SOURCE)/libft
+GNL = $(SOURCE)/get_next_line
 
-# VPATH for source files
-VPATH = $(PIPEX_DIR):$(PIPEX_BONUS_DIR):$(GNL_DIR)
+LIBRARY = $(DIRECTORY)/library
+PIPEX_A = $(LIBRARY)/pipex.a
+PIPEX_BONUS_A = $(LIBRARY)/pipex_bonus.a
+LIBFT_A = $(LIBRARY)/libft.a
+GNL_A = $(LIBRARY)/gnl.a
 
-# SOURCE FILES (just the names)
-SRCS_PIPEX = pipex.c utils.c get_next_line.c get_next_line_utils.c
-SRCS_BONUS = pipex_bonus.c utils_bonus.c error_bonus.c pipex_path_bonus.c get_next_line.c get_next_line_utils.c
+PIPEX_SRCS = $(addprefix $(PIPEX)/, \
+pipex.c \
+utils.c \
+)
+PIPEX_BONUS_SRCS = $(addprefix $(PIPEX_BONUS)/, \
+pipex_bonus.c \
+error_bonus.c \
+utils_bonus.c \
+pipex_path_bonus.c \
+)
+GNL_SRCS = $(addprefix $(GNL)/, \
+get_next_line.c \
+get_next_line_utils.c \
+)
+LIBFT_SRCS = $(addprefix $(LIBFT)/, \
+ft_split.c \
+ft_strjoin.c \
+ft_calloc.c \
+ft_strlen.c \
+ft_bzero.c \
+ft_strncmp.c \
+ft_strchr.c \
+ft_strdup.c \
+ft_putstr_fd.c \
+)
+CC = cc -Wall -Wextra -Werror
 
-# OBJECT FILES
-OBJS = $(SRCS_PIPEX:.c=.o)
-OBJS_BONUS = $(SRCS_BONUS:.c=.o)
-
-# LIBRARIES
-LIBFT = $(LIBFT_DIR)/libft.a
-
-# INCLUDES
-INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
-
-# RULES
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBFT_DIR) -lft
+$(NAME): $(PIPEX_A) $(LIBFT_A)
+	$(CC) $^ -o $@
+	
+$(PIPEX_A): $(PIPEX_SRCS)
+	$(MAKE) -C $(PIPEX)
 
-bonus: $(NAME_BONUS)
+$(LIBFT_A): $(LIBFT_SRCS)
+	$(MAKE) -C $(LIBFT)
+	
+$(GNL_A): $(GNL_SRCS)
+	$(MAKE) -C $(GNL)
 
-$(NAME_BONUS): $(OBJS_BONUS) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME_BONUS) $(OBJS_BONUS) -L$(LIBFT_DIR) -lft
+$(PIPEX_BONUS_A): $(PIPEX_BONUS_SRCS)
+	$(MAKE) -C $(PIPEX_BONUS)
+	
+bonus: .depend
 
-$(LIBFT):
-	@make -C $(LIBFT_DIR)
+.depend: $(PIPEX_BONUS_A) $(LIBFT_A) $(GNL_A)
+	$(CC) $^ -o $(NAME)
+	@touch .depend
 
 clean:
-	@make -C $(LIBFT_DIR) clean
-	@$(RM) $(OBJS) $(OBJS_BONUS)
-
+	$(MAKE) -C $(GNL) fclean
+	$(MAKE) -C $(PIPEX_BONUS) fclean
+	$(MAKE) -C $(PIPEX) fclean
+	$(MAKE) -C $(LIBFT) fclean
+	@rm -rf .depend
+	
 fclean: clean
-	@make -C $(LIBFT_DIR) fclean
-	@$(RM) $(NAME) $(NAME_BONUS)
+	rm -rf $(NAME)
 
+	
 re: fclean all
 
-re_bonus: fclean bonus
-
-.PHONY: all bonus clean fclean re re_bonus
+.PHONY: all clean fclean re bonus

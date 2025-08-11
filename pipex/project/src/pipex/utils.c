@@ -6,34 +6,36 @@
 /*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 18:34:31 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/08/05 21:10:30 by jaemyu           ###   ########.fr       */
+/*   Updated: 2025/08/11 16:53:00 by jaemyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 #include <stdio.h>
 
-void	error_exit(const char *msg, int exit_code)
+void	error_exit(const char *msg, int exit_code, char **splited)
 {
-    perror(msg);
-	if(!exit_code)
+	if (splited)
+		free_split(splited);
+	perror(msg);
+	if (! exit_code)
 		exit(errno);
-    exit(exit_code);
+	exit(exit_code);
 }
 
-void    free_split(char **split)
+void	free_split(char **split)
 {
-    int i;
+	int	i;
 
-    if (!split)
-        return ;
-    i = 0;
-    while (split[i])
-    {
+	if (! split)
+		return ;
+	i = 0;
+	while (split[i])
+	{
 		free(split[i]);
 		i++;
-    }
-    free(split);
+	}
+	free(split);
 }
 
 char	**find_paths(char **env)
@@ -80,28 +82,23 @@ void	execute_cmd(char *argv, char **env)
 	char	*cmd_path;
 
 	path = find_paths(env);
-	if (!*argv || !path)
+	if (!*argv || !*path)
 	{
 		free_split(path);
 		write(2, "permission denied\n", 18);
 		exit(126);
 	}
 	cmd_args = ft_split(argv, ' ');
-	if (!cmd_args)
+	if (!cmd_args || !*cmd_args)
 	{
 		free_split(path);
-		free_split(cmd_args);
-		error_exit("command not found", 127);
+		error_exit("command not found", 127, cmd_args);
 	}
 	cmd_path = get_cmd_path(path, cmd_args[0]);
 	free_split(path);
 	if (!cmd_path)
-	{
-		free_split(cmd_args);
-		error_exit("command not found", 127);
-	}
+		error_exit("command not found", 127, cmd_args);
 	execve(cmd_path, cmd_args, env);
 	free(cmd_path);
-	free_split(cmd_args);
-	error_exit("execve failed", 1);
+	error_exit("execve failed", 1, cmd_args);
 }

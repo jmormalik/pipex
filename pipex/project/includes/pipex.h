@@ -6,7 +6,7 @@
 /*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:43:37 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/08/02 22:28:09 by jaemyu           ###   ########.fr       */
+/*   Updated: 2025/08/11 16:54:52 by jaemyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-void	error_exit(const char *msg, int exit_code);
+void	error_exit(const char *msg, int exit_code, char **splited);
 void	free_split(char **split);
 char	**find_paths(char **env);
 char	*get_cmd_path(char **paths, char *cmd);

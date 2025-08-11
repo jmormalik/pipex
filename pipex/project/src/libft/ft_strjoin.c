@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemyu <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hekim <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 18:53:03 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/04/03 21:22:27 by jaemyu           ###   ########.fr       */
+/*   Created: 2025/04/02 16:52:53 by hekim             #+#    #+#             */
+/*   Updated: 2025/04/02 16:53:30 by hekim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,24 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char		*result;
-	size_t		r_len;
-	size_t		i;
-	size_t		j;
+	int			i;
+	size_t		total;
+	char		*str;
 
+	total = ft_strlen(s1) + ft_strlen(s2);
+	str = ft_calloc(total + 1, sizeof(char));
 	i = 0;
-	j = 0;
-	r_len = ft_strlen(s1) + ft_strlen(s2);
-	result = (char *)malloc(r_len + 1);
-	if (!result)
-		return (NULL);
-	while (s1[i])
+	if (!str)
+		return ((void *)0);
+	while (s1 && *s1)
 	{
-		result[i] = s1[i];
-		i++;
+		str[i++] = *s1;
+		s1++;
 	}
-	while (s2[j])
+	while (s2 && *s2)
 	{
-		result[i + j] = s2[j];
-		j++;
+		str[i++] = *s2;
+		s2++;
 	}
-	result[i + j] = '\0';
-	return (result);
+	return (str);
 }

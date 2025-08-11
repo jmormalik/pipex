@@ -1,19 +1,14 @@
 CC = cc -c -Wall -Wextra -Werror
-NAME = libft.a
+NAME = pipex_bonus.a
 
 INC = -I ../../includes
 LIB = ../../library
 
 SRCS = \
-ft_split.c \
-ft_strjoin.c \
-ft_calloc.c \
-ft_strlen.c \
-ft_bzero.c \
-ft_strchr.c \
-ft_strncmp.c \
-ft_putstr_fd.c \
-ft_strdup.c
+pipex_bonus.c \
+pipex_path_bonus.c \
+error_bonus.c \
+utils_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 

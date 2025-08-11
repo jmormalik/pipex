@@ -1,19 +1,12 @@
 CC = cc -c -Wall -Wextra -Werror
-NAME = libft.a
+NAME = gnl.a
 
 INC = -I ../../includes
 LIB = ../../library
 
 SRCS = \
-ft_split.c \
-ft_strjoin.c \
-ft_calloc.c \
-ft_strlen.c \
-ft_bzero.c \
-ft_strchr.c \
-ft_strncmp.c \
-ft_putstr_fd.c \
-ft_strdup.c
+get_next_line.c \
+get_next_line_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

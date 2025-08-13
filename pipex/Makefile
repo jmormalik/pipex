@@ -14,65 +14,40 @@ PIPEX_BONUS_A = $(LIBRARY)/pipex_bonus.a
 LIBFT_A = $(LIBRARY)/libft.a
 GNL_A = $(LIBRARY)/gnl.a
 
-PIPEX_SRCS = $(addprefix $(PIPEX)/, \
-pipex.c \
-utils.c \
-)
-PIPEX_BONUS_SRCS = $(addprefix $(PIPEX_BONUS)/, \
-pipex_bonus.c \
-error_bonus.c \
-utils_bonus.c \
-pipex_path_bonus.c \
-)
-GNL_SRCS = $(addprefix $(GNL)/, \
-get_next_line.c \
-get_next_line_utils.c \
-)
-LIBFT_SRCS = $(addprefix $(LIBFT)/, \
-ft_split.c \
-ft_strjoin.c \
-ft_calloc.c \
-ft_strlen.c \
-ft_bzero.c \
-ft_strncmp.c \
-ft_strchr.c \
-ft_strdup.c \
-ft_putstr_fd.c \
-)
 CC = cc -Wall -Wextra -Werror
 
 all: $(NAME)
 
 $(NAME): $(PIPEX_A) $(LIBFT_A)
-	$(CC) $^ -o $@
+	@$(CC) $^ -o $@
 	
-$(PIPEX_A): $(PIPEX_SRCS)
-	$(MAKE) -C $(PIPEX)
+$(PIPEX_A): $(PIPEX)
+	@$(MAKE) -C $(PIPEX) -s
 
-$(LIBFT_A): $(LIBFT_SRCS)
-	$(MAKE) -C $(LIBFT)
+$(LIBFT_A): $(LIBFT)
+	@$(MAKE) -C $(LIBFT) -s
 	
-$(GNL_A): $(GNL_SRCS)
-	$(MAKE) -C $(GNL)
+$(GNL_A): $(GNL)
+	@$(MAKE) -C $(GNL) -s
 
-$(PIPEX_BONUS_A): $(PIPEX_BONUS_SRCS)
-	$(MAKE) -C $(PIPEX_BONUS)
+$(PIPEX_BONUS_A): $(PIPEX_BONUS)
+	@$(MAKE) -C $(PIPEX_BONUS) -s
 	
 bonus: .depend
 
 .depend: $(PIPEX_BONUS_A) $(LIBFT_A) $(GNL_A)
-	$(CC) $^ -o $(NAME)
+	@$(CC) $^ -o $(NAME)
 	@touch .depend
 
 clean:
-	$(MAKE) -C $(GNL) fclean
-	$(MAKE) -C $(PIPEX_BONUS) fclean
-	$(MAKE) -C $(PIPEX) fclean
-	$(MAKE) -C $(LIBFT) fclean
+	@$(MAKE) -C $(GNL) fclean -s
+	@$(MAKE) -C $(PIPEX_BONUS) fclean -s
+	@$(MAKE) -C $(PIPEX) fclean -s
+	@$(MAKE) -C $(LIBFT) fclean -s
 	@rm -rf .depend
 	
 fclean: clean
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
 
 	
 re: fclean all

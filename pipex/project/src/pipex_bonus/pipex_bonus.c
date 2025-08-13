@@ -6,25 +6,27 @@
 /*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 21:44:45 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/08/11 17:29:19 by jaemyu           ###   ########.fr       */
+/*   Updated: 2025/08/13 13:49:04 by jaemyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static pid_t	outfile(char *av, char **env, int input_fd, int out_fd)
+static pid_t	outfile(char *av, char **env, int input_fd, char *filename)
 {
 	pid_t	pid;
+	int		out_fd;
 
 	pid = fork();
 	if (pid < 0)
 		error_exit("fork failed", 1, NULL);
 	if (pid == 0)
 	{
+		out_fd = open_file(filename, 1);
 		if (out_fd < 0)
 		{
 			close(input_fd);
-			exit (1);
+			error_exit("file open error", 0, NULL);
 		}
 		dup2(input_fd, STDIN_FILENO);
 		dup2(out_fd, STDOUT_FILENO);
@@ -33,7 +35,6 @@ static pid_t	outfile(char *av, char **env, int input_fd, int out_fd)
 		execute_cmd(av, env);
 	}
 	close(input_fd);
-	close(out_fd);
 	return (pid);
 }
 
@@ -90,7 +91,7 @@ int	check_av(int ac, char **av, char **env)
 	pid_t	end_pid;
 	int		mode;
 
-	i = 2;
+	i = 3;
 	mode = 1;
 	if (ac > 5 && ft_strncmp(av[1], "here_doc", 9) == 0 && i++)
 	{	
@@ -98,12 +99,14 @@ int	check_av(int ac, char **av, char **env)
 		inout_fd[0] = here_doc(av, ft_strlen(av[2]));
 	}
 	else
-		inout_fd[0] = open_file(av[1], 0);
+		inout_fd[0] = first_process(av[2], env, av[1]);
 	input_fd = inout_fd[0];
 	while (i < ac - 2)
 		input_fd = child_process(av[i++], env, input_fd);
-	inout_fd[1] = open_file(av[ac - 1], mode);
-	end_pid = outfile(av[ac - 2], env, input_fd, inout_fd[1]);
+	if (mode == 1)
+		end_pid = outfile(av[ac - 2], env, input_fd, av[ac - 1]);
+	else
+		end_pid = last_process(av[ac - 2], env, input_fd, av[ac - 1]);
 	return (wait_wait(end_pid));
 }
 
@@ -113,5 +116,5 @@ int	main(int ac, char **av, char **env)
 		return (check_av(ac, av, env));
 	else
 		ft_putstr_fd("Usage: ./pipex infile cmd1 cmd2 outfile\n", 2);
-	exit(EXIT_FAILURE);
+	exit(1);
 }

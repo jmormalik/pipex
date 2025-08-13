@@ -15,21 +15,17 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 %.o: %.c
-	$(CC) $^ -o $@ $(INC)
+	@$(CC) $^ -o $@ $(INC)
 
-.depend: $(OBJS)
+$(NAME): $(OBJS)
 	@mkdir -p ../../library
-	ar -rcs $(LIB)/$(NAME) $^
-	@touch .depend
-	
-$(NAME): .depend
+	@ar -rcs $(LIB)/$(NAME) $^
 
 clean:
-	rm -f $(OBJS)
+	@rm -f $(OBJS)
 
 fclean: clean
-	rm -f $(LIB)/$(NAME)
-	@rm -f .depend
+	@rm -f $(LIB)/$(NAME)
 
 re: fclean all
 

@@ -29,7 +29,7 @@ int	child_process(char	*av, char **env, int input_fd)
 {
 	int		pipefd[2];
 	pid_t	pid;
- 
+
 	if (pipe(pipefd) < 0)
 		error_exit("pipe failed", 1, NULL);
 	pid = fork();
@@ -59,7 +59,7 @@ int	first_process(char	*av, char **env, char *filename)
 	int		pipefd[2];
 	int		input_fd;
 	pid_t	pid;
- 
+
 	if (pipe(pipefd) < 0)
 		error_exit("pipe failed", 1, NULL);
 	pid = fork();
@@ -87,7 +87,7 @@ pid_t	last_process(char	*av, char **env, int input_fd, char *filename)
 {
 	pid_t	pid;
 	int		output_fd;
- 
+
 	pid = fork();
 	if (pid < 0)
 		error_exit("fork failed", 1, NULL);
